@@ -27,7 +27,7 @@ class MovieController extends Controller
             'api_key' => $apiKey,
         ])->json()['genres'];
 
-        return view('welcome', compact('popularMovies', 'nowPlayingMovies', 'genres'));
+        return view('home', compact('popularMovies', 'nowPlayingMovies', 'genres'));
     }
 
     public function search(Request $request)
@@ -59,17 +59,42 @@ class MovieController extends Controller
         return view('search', compact('results', 'query'));
     }
 
-    public function filterByGenre(Request $request)
+    public function filterByGenre(Request $request, $genre_id)
     {
-        $genreId = $request->input('genre_id');
+        $genreId = $genre_id;
+        $year = $request->input('year');
+        $page = $request->input('page', 1);
         $apiKey = env('TMDB_API_KEY');
         $baseUrl = 'https://api.themoviedb.org/3';
 
-        $results = Http::get("{$baseUrl}/discover/movie", [
+        $genres = Http::get("{$baseUrl}/genre/movie/list", [
+            'api_key' => $apiKey,
+        ])->json()['genres'];
+        $genreName = collect($genres)->firstWhere('id', $genreId)['name'] ?? 'Unknown Genre';
+
+        $params = [
             'api_key' => $apiKey,
             'with_genres' => $genreId,
-        ])->json()['results'];
+            'page' => $page,
+        ];
+        if ($year) {
+            $params['primary_release_year'] = $year;
+        }
 
-        return response()->json($results);
+        $response = Http::get("{$baseUrl}/discover/movie", $params)->json();
+
+        $movies = $response['results'] ?? [];
+        $totalResults = $response['total_results'] ?? 0;
+        $totalPages = $response['total_pages'] ?? 1;
+
+        $results = new \Illuminate\Pagination\LengthAwarePaginator(
+            $movies,
+            $totalResults,
+            20,
+            $page,
+            ['path' => route('filter.genre', $genreId), 'query' => array_filter(['year' => $year])]
+        );
+
+        return view('genre', compact('results', 'genreId', 'genreName', 'year'));
     }
 }
