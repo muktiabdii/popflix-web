@@ -30,33 +30,39 @@ class MovieController extends Controller
         return view('home', compact('popularMovies', 'nowPlayingMovies', 'genres'));
     }
 
-    public function search(Request $request)
+    public function show($id)
     {
-        $query = $request->input('query', '');
-        $page = $request->input('page', 1);
         $apiKey = env('TMDB_API_KEY');
         $baseUrl = 'https://api.themoviedb.org/3';
 
-        $response = Http::get("{$baseUrl}/search/movie", [
+        // Fetch movie details
+        $movie = Http::get("{$baseUrl}/movie/{$id}", [
             'api_key' => $apiKey,
-            'query' => $query,
-            'page' => $page,
         ])->json();
 
-        $movies = $response['results'] ?? [];
-        $totalResults = $response['total_results'] ?? 0;
-        $totalPages = $response['total_pages'] ?? 1;
+        // Fetch movie videos (for trailer)
+        $videos = Http::get("{$baseUrl}/movie/{$id}/videos", [
+            'api_key' => $apiKey,
+        ])->json()['results'];
 
-        // Create a LengthAwarePaginator instance for Laravel pagination
-        $results = new \Illuminate\Pagination\LengthAwarePaginator(
-            $movies,
-            $totalResults,
-            20, // TMDb returns 20 results per page
-            $page,
-            ['path' => route('search'), 'query' => ['query' => $query]]
-        );
+        // Find the first YouTube trailer
+        $trailer = collect($videos)->firstWhere('site', 'YouTube') ?? null;
 
-        return view('search', compact('results', 'query'));
+        return view('movie-detail', compact('movie', 'trailer'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $apiKey = env('TMDB_API_KEY');
+        $baseUrl = 'https://api.themoviedb.org/3';
+
+        $results = Http::get("{$baseUrl}/search/movie", [
+            'api_key' => $apiKey,
+            'query' => $query,
+        ])->json()['results'];
+
+        return response()->json($results);
     }
 
     public function filterByGenre(Request $request, $genre_id)

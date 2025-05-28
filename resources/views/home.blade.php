@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PopFlix</title>
+    <title>Movie Database</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,10 +29,10 @@
     <!-- Header -->
     <header class="bg-dark-gray shadow py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
-            <div class="text-2xl font-bold text-crimson-red">PopFlix</div>
+            <div class="text-2xl font-bold text-crimson-red">MovieDB</div>
             <div class="flex items-center space-x-4">
-                <input type="text" id="searchInput" placeholder="Search movies..."
-                    class="px-4 py-2 rounded bg-gray-secondary text-light-gray focus:outline-none focus:ring-2 focus:ring-soft-blue">
+                <input type="text" id="searchInput" placeholder="Search movies..." class="px-4 py-2 rounded bg-gray-secondary text-light-gray focus:outline-none focus:ring-2 focus:ring-soft-blue">
+                <a href="{{ route('register') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Register</a>
                 <a href="/login" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
                 <a href="/watchlist"
                     class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
@@ -106,30 +106,17 @@
     </footer>
 
     <script>
-        const searchInput = document.getElementById('searchInput');
-
-        // Instant search (opsional, bisa dihapus kalau cuma mau Enter saja)
-        searchInput.addEventListener('input', async function (e) {
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', async function(e) {
             const query = e.target.value;
             if (query.length < 3) return;
 
             const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
             const results = await response.json();
-            console.log('Search results (input):', results);
+            console.log('Search results:', results); // Replace with UI update logic
         });
 
-        // Tombol Enter di search bar
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const query = searchInput.value.trim();
-                if (query.length > 0) {
-                    window.location.href = `/search?query=${encodeURIComponent(query)}`;
-                }
-            }
-        });
-
-        // Filter by genre
+        // Genre filter functionality
         document.querySelectorAll('.genre-button').forEach(button => {
             button.addEventListener('click', function () {
                 const genreId = this.dataset.genreId;
@@ -139,5 +126,4 @@
         });
     </script>
 </body>
-
 </html>
