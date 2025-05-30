@@ -31,7 +31,7 @@
             <div class="flex items-center space-x-4">
                 <input type="text" id="searchInput" placeholder="Search movies..." class="px-4 py-2 rounded bg-gray-secondary text-light-gray focus:outline-none focus:ring-2 focus:ring-soft-blue">
                 <a href="{{ route('register') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Register</a>
-                <a href="/login" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
+                <a href="{{ route('login') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
                 <a href="/watchlist" class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
             </div>
         </div>

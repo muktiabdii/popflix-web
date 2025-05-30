@@ -72,7 +72,7 @@
             <!-- Submit Button -->
             <button type="submit" class="w-full px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Register</button>
         </form>
-        <p class="text-gray-secondary text-center mt-4">Already have an account? <a href="/login" class="text-crimson-red hover:text-soft-blue">Login</a></p>
+        <p class="text-gray-secondary text-center mt-4">Already have an account? <a href="{{ route('login') }}" class="text-crimson-red hover:text-soft-blue">Login</a></p>
     </div>
     <script>
         const showPasswordCheckbox = document.getElementById('show-password');
