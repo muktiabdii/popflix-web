@@ -39,7 +39,7 @@ class MovieController extends Controller
         $movie = Http::get("{$baseUrl}/movie/{$id}", [
             'api_key' => $apiKey,
         ])->json();
-
+        
         // Fetch movie videos (for trailer)
         $videos = Http::get("{$baseUrl}/movie/{$id}/videos", [
             'api_key' => $apiKey,
