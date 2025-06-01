@@ -29,12 +29,15 @@
     <!-- Header -->
     <header class="bg-dark-gray shadow py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
-            <div class="text-2xl font-bold text-crimson-red">MovieDB</div>
+            <div class="text-2xl font-bold text-crimson-red">PopFlix</div>
             <div class="flex items-center space-x-4">
-                <input type="text" id="searchInput" placeholder="Search movies..." class="px-4 py-2 rounded bg-gray-secondary text-light-gray focus:outline-none focus:ring-2 focus:ring-soft-blue">
-                <a href="{{ route('register') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Register</a>
-                <a href="{{ route('login') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
-                <a href="/watchlist" class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
+                <input type="text" id="searchInput" placeholder="Search movies..." class="px-4 py-2 rounded bg-dark-gray text-light-gray border border-soft-blue placeholder-gray-secondary focus:outline-none focus:ring-2 focus:ring-soft-blue">
+                @guest
+                    <a href="{{ route('login') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
+                @else
+                    <a href="{{ route('profile') }}" class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Profile</a>
+                @endguest
+                <a href="{{ route('watchlist') }}" class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
             </div>
         </div>
     </header>
@@ -101,7 +104,7 @@
     <footer class="bg-dark-gray py-4 text-center">
         <p class="text-gray-secondary">Powered by <a href="https://www.themoviedb.org/" target="_blank"
                 class="text-crimson-red hover:text-soft-blue">TMDb</a></p>
-        <p class="text-gray-secondary">Created with ❤️</p>
+        <p class="text-gray-secondary">Created with ❤️ by PopFlix Team</p>
     </footer>
 
     <script>
