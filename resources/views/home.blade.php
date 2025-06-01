@@ -113,14 +113,12 @@
 
             const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
             const results = await response.json();
-            console.log('Search results:', results); // Replace with UI update logic
         });
 
         // Genre filter functionality
         document.querySelectorAll('.genre-button').forEach(button => {
             button.addEventListener('click', function () {
                 const genreId = this.dataset.genreId;
-                console.log('Genre selected:', genreId);
                 window.location.href = `/genre/${genreId}`;
             });
         });
