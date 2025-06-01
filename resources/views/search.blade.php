@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PopFlix</title>
+    <title>Hasil Pencarian "{{ $query }}"</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -23,18 +24,27 @@
         }
     </script>
 </head>
+
 <body class="bg-gunmetal-black text-light-gray">
     <!-- Sticky Search Bar -->
     <header class="bg-dark-gray shadow py-4 sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex items-center justify-between">
-                <a href="/" class="text-2xl font-bold text-crimson-red">MovieDB</a>
+                <a href="/" class="text-2xl font-bold text-crimson-red">PopFlix</a>
                 <form action="{{ route('search') }}" method="GET" class="flex-1 mx-4">
-                    <input type="text" name="query" id="searchInput" value="{{ $query }}" placeholder="Search movies..." class="w-full px-4 py-2 rounded bg-gray-secondary text-light-gray focus:outline-none focus:ring-2 focus:ring-soft-blue">
+                    <input type="text" name="query" id="searchInput" value="{{ $query }}" placeholder="Search movies..."
+                        class="w-full px-4 py-2 rounded-lg bg-[#2a2a2a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-soft-blue shadow-inner transition duration-200">
                 </form>
                 <div class="flex items-center space-x-4">
-                    <a href="/login" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
-                    <a href="/watchlist" class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
+                    @guest
+                        <a href="{{ route('login') }}"
+                            class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
+                    @else
+                        <a href="{{ route('profile') }}"
+                            class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Profile</a>
+                    @endguest
+                    <a href="{{ route('watchlist') }}"
+                        class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
                 </div>
             </div>
         </div>
@@ -50,12 +60,17 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     @foreach ($results as $movie)
                         <div class="bg-dark-gray rounded-lg overflow-hidden shadow hover:shadow-[0_0_10px_#2E82FF]">
-                            <img src="{{ $movie['poster_path'] ? 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] : 'https://via.placeholder.com/500x750?text=No+Poster' }}" alt="{{ $movie['title'] }}" class="w-full h-64 object-cover">
+                            <img src="{{ $movie['poster_path'] ? 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] : 'https://via.placeholder.com/500x750?text=No+Poster' }}"
+                                alt="{{ $movie['title'] }}" class="w-full h-64 object-cover">
                             <div class="p-4">
                                 <h3 class="text-lg font-semibold truncate">{{ $movie['title'] }}</h3>
-                                <p class="text-gray-secondary">Rating: {{ number_format($movie['vote_average'], 1) }}/10</p>
-                                <p class="text-gray-secondary">Tahun: {{ $movie['release_date'] ? substr($movie['release_date'], 0, 4) : 'N/A' }}</p>
-                                <a href="/movie/{{ $movie['id'] }}" class="mt-2 inline-block px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Lihat Detail</a>
+                                <p class="text-gray-secondary">Rating:
+                                    {{ $movie['vote_average'] ? number_format($movie['vote_average'], 1) : 'N/A' }}/10</p>
+                                <p class="text-gray-secondary">Tahun:
+                                    {{ $movie['release_date'] ? substr($movie['release_date'], 0, 4) : 'N/A' }}</p>
+                                <a href="/movie/{{ $movie['id'] }}"
+                                    class="mt-2 inline-block px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Lihat
+                                    Detail</a>
                             </div>
                         </div>
                     @endforeach
@@ -75,14 +90,15 @@
 
     <!-- Footer -->
     <footer class="bg-dark-gray py-4 text-center">
-        <p class="text-gray-secondary">Powered by <a href="https://www.themoviedb.org/" target="_blank" class="text-crimson-red hover:text-soft-blue">TMDb</a></p>
-        <p class="text-gray-secondary">Created by Your Name</p>
+        <p class="text-gray-secondary">Powered by <a href="https://www.themoviedb.org/" target="_blank"
+                class="text-crimson-red hover:text-soft-blue">TMDb</a></p>
+        <p class="text-gray-secondary">Created with ❤️ by PopFlix Team</p>
     </footer>
 
     <script>
-        // Real-time search (optional, debounced to reduce API calls)
+        // Real-time search (debounced)
         let searchTimeout;
-        document.getElementById('searchInput').addEventListener('input', function(e) {
+        document.getElementById('searchInput').addEventListener('input', function (e) {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 const query = e.target.value;
@@ -93,4 +109,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watchlist - Movie Database</title>
+    <title>Watchlist Saya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,10 +37,6 @@
             <div class="text-2xl font-bold text-crimson-red">MovieDB</div>
             <div class="flex items-center space-x-4">
                 <a href="{{ route('home') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Home</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Logout</button>
-                </form>
             </div>
         </div>
     </header>

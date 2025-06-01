@@ -39,7 +39,7 @@ class MovieController extends Controller
         $movie = Http::get("{$baseUrl}/movie/{$id}", [
             'api_key' => $apiKey,
         ])->json();
-        
+
         // Fetch movie videos (for trailer)
         $videos = Http::get("{$baseUrl}/movie/{$id}/videos", [
             'api_key' => $apiKey,
@@ -54,15 +54,33 @@ class MovieController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
+        $page = $request->input('page', 1);
         $apiKey = env('TMDB_API_KEY');
         $baseUrl = 'https://api.themoviedb.org/3';
 
-        $results = Http::get("{$baseUrl}/search/movie", [
-            'api_key' => $apiKey,
-            'query' => $query,
-        ])->json()['results'] ?? [];
+        if ($query) {
+            $response = Http::get("{$baseUrl}/search/movie", [
+                'api_key' => $apiKey,
+                'query' => $query,
+                'page' => $page,
+            ])->json();
 
-        return response()->json($results);
+            $movies = $response['results'] ?? [];
+            $totalResults = $response['total_results'] ?? 0;
+            $totalPages = $response['total_pages'] ?? 1;
+
+            $results = new \Illuminate\Pagination\LengthAwarePaginator(
+                $movies,
+                $totalResults,
+                20,
+                $page,
+                ['path' => route('search'), 'query' => ['query' => $query]]
+            );
+        } else {
+            $results = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
+        }
+
+        return view('search', compact('results', 'query'));
     }
 
     public function filterByGenre(Request $request, $genre_id)

@@ -31,17 +31,13 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <nav class="text-sm">
-                        <a href="/" class="text-crimson-red hover:text-soft-blue">Home</a> &gt;
-                        <span>{{ $genreName }}</span>
-                    </nav>
                     <h1 class="text-3xl font-bold">{{ $genreName }}</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="/search"
-                        class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Search</a>
-                    <a href="/login"
-                        class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
+                    @guest
+                        <a href="/login"
+                            class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
+                    @endguest
                     <a href="/watchlist"
                         class="px-4 py-2 bg-slate-blue text-light-gray rounded hover:bg-soft-blue">Watchlist</a>
                 </div>
@@ -55,13 +51,13 @@
             <!-- Year Filter Dropdown -->
             <div class="mb-6">
                 <form action="{{ route('filter.genre', $genreId) }}" method="GET">
-                    <select name="year" id="yearFilter" class="...">
-                        <option value="">All Years</option>
+                    <select name="year" id="yearFilter"
+                        class="bg-dark-gray text-light-gray border border-gray-secondary rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-soft-blue hover:bg-slate-blue transition-colors duration-200">
+                        <option value="" class="bg-dark-gray">All Years</option>
                         @for ($i = date('Y'); $i >= 1900; $i--)
-                            <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }} class="bg-dark-gray">{{ $i }}</option>
                         @endfor
                     </select>
-                    <button type="submit" class="...">Filter</button>
                 </form>
             </div>
 

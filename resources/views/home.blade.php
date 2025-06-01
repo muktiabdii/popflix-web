@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Database</title>
+    <title>PopFlix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,7 +31,9 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
             <div class="text-2xl font-bold text-crimson-red">PopFlix</div>
             <div class="flex items-center space-x-4">
-                <input type="text" id="searchInput" placeholder="Search movies..." class="px-4 py-2 rounded bg-dark-gray text-light-gray border border-soft-blue placeholder-gray-secondary focus:outline-none focus:ring-2 focus:ring-soft-blue">
+                <form id="searchForm" action="{{ route('search') }}" method="GET" class="flex items-center space-x-2">
+                    <input type="text" id="searchInput" name="query" placeholder="Search movies..." class="px-4 py-2 rounded bg-dark-gray text-light-gray border border-soft-blue placeholder-gray-secondary focus:outline-none focus:ring-2 focus:ring-soft-blue">
+                </form>
                 @guest
                     <a href="{{ route('login') }}" class="px-4 py-2 bg-crimson-red text-light-gray rounded hover:bg-soft-blue">Login</a>
                 @else
@@ -108,21 +110,24 @@
     </footer>
 
     <script>
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', async function(e) {
-            const query = e.target.value;
-            if (query.length < 3) return;
-
-            const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
-            const results = await response.json();
-        });
-
         // Genre filter functionality
         document.querySelectorAll('.genre-button').forEach(button => {
             button.addEventListener('click', function () {
                 const genreId = this.dataset.genreId;
                 window.location.href = `/genre/${genreId}`;
             });
+        });
+
+        // Real-time search (debounced)
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = e.target.value;
+                if (query.length >= 3) {
+                    window.location.href = `/search?query=${encodeURIComponent(query)}`;
+                }
+            }, 500);
         });
     </script>
 </body>
