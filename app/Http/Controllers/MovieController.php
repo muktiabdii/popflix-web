@@ -15,17 +15,17 @@ class MovieController extends Controller
         // Fetch popular movies
         $popularMovies = Http::get("{$baseUrl}/movie/popular", [
             'api_key' => $apiKey,
-        ])->json()['results'];
+        ])->json()['results'] ?? [];
 
         // Fetch now playing movies
         $nowPlayingMovies = Http::get("{$baseUrl}/movie/now_playing", [
             'api_key' => $apiKey,
-        ])->json()['results'];
+        ])->json()['results'] ?? [];
 
         // Fetch genres
         $genres = Http::get("{$baseUrl}/genre/movie/list", [
             'api_key' => $apiKey,
-        ])->json()['genres'];
+        ])->json()['genres'] ?? [];
 
         return view('home', compact('popularMovies', 'nowPlayingMovies', 'genres'));
     }
@@ -39,11 +39,11 @@ class MovieController extends Controller
         $movie = Http::get("{$baseUrl}/movie/{$id}", [
             'api_key' => $apiKey,
         ])->json();
-
+        
         // Fetch movie videos (for trailer)
         $videos = Http::get("{$baseUrl}/movie/{$id}/videos", [
             'api_key' => $apiKey,
-        ])->json()['results'];
+        ])->json()['results'] ?? [];
 
         // Find the first YouTube trailer
         $trailer = collect($videos)->firstWhere('site', 'YouTube') ?? null;
@@ -60,7 +60,7 @@ class MovieController extends Controller
         $results = Http::get("{$baseUrl}/search/movie", [
             'api_key' => $apiKey,
             'query' => $query,
-        ])->json()['results'];
+        ])->json()['results'] ?? [];
 
         return response()->json($results);
     }
