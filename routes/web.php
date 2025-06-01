@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WatchlistController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('/search', [MovieController::class, 'search'])->name('search');
@@ -22,6 +23,10 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Auth - Reset Password
+Route::get('/password/reset', [ResetPasswordController::class, 'showResetForm'])->name('password.request');
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Watchlist (butuh login)
 Route::middleware('auth')->group(function () {
