@@ -7,13 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    // Tampilkan halaman profile
     public function show()
     {
         return view('profile');
     }
 
-    // Update profile user
     public function update(Request $request)
     {
         $user = Auth::user();

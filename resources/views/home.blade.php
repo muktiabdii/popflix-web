@@ -110,7 +110,6 @@
     </footer>
 
     <script>
-        // Genre filter functionality
         document.querySelectorAll('.genre-button').forEach(button => {
             button.addEventListener('click', function () {
                 const genreId = this.dataset.genreId;
@@ -118,7 +117,6 @@
             });
         });
 
-        // Real-time search (debounced)
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function(e) {
             clearTimeout(searchTimeout);

@@ -10,11 +10,6 @@ use PDOException;
 
 class WatchlistController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-
     public function index()
     {
         $watchlist = Watchlist::where('user_id', Auth::id())->get();
@@ -39,12 +34,12 @@ class WatchlistController extends Controller
 
             return redirect()->back()->with('success', 'Movie added to watchlist!');
         } catch (QueryException $e) {
-            if ($e->getCode() == '23000') { // Duplicate entry
+            if ($e->getCode() == '23000') { 
                 return redirect()->back()->withErrors(['movie_id' => 'This movie is already in your watchlist.']);
             }
             throw $e;
         } catch (PDOException $e) {
-            if ($e->getCode() == '23000') { // Duplicate entry for PDO
+            if ($e->getCode() == '23000') { 
                 return redirect()->back()->withErrors(['movie_id' => 'This movie is already in your watchlist.']);
             }
             throw $e;

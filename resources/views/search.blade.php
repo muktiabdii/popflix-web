@@ -96,7 +96,6 @@
     </footer>
 
     <script>
-        // Real-time search (debounced)
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function (e) {
             clearTimeout(searchTimeout);
