@@ -12,17 +12,14 @@ class MovieController extends Controller
         $apiKey = env('TMDB_API_KEY');
         $baseUrl = 'https://api.themoviedb.org/3';
 
-        // Fetch popular movies
         $popularMovies = Http::get("{$baseUrl}/movie/popular", [
             'api_key' => $apiKey,
         ])->json()['results'] ?? [];
 
-        // Fetch now playing movies
         $nowPlayingMovies = Http::get("{$baseUrl}/movie/now_playing", [
             'api_key' => $apiKey,
         ])->json()['results'] ?? [];
 
-        // Fetch genres
         $genres = Http::get("{$baseUrl}/genre/movie/list", [
             'api_key' => $apiKey,
         ])->json()['genres'] ?? [];
@@ -35,17 +32,14 @@ class MovieController extends Controller
         $apiKey = env('TMDB_API_KEY');
         $baseUrl = 'https://api.themoviedb.org/3';
 
-        // Fetch movie details
         $movie = Http::get("{$baseUrl}/movie/{$id}", [
             'api_key' => $apiKey,
         ])->json();
 
-        // Fetch movie videos (for trailer)
         $videos = Http::get("{$baseUrl}/movie/{$id}/videos", [
             'api_key' => $apiKey,
         ])->json()['results'] ?? [];
 
-        // Find the first YouTube trailer
         $trailer = collect($videos)->firstWhere('site', 'YouTube') ?? null;
 
         return view('movie-detail', compact('movie', 'trailer'));

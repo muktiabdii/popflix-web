@@ -101,7 +101,6 @@
     </footer>
 
     <script>
-        // Year filter auto-submit on change
         document.getElementById('yearFilter').addEventListener('change', function () {
             this.form.submit();
         });

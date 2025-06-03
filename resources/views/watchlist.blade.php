@@ -67,7 +67,6 @@
     </section>
 
     <script>
-        // Toast Notification
         function showToast(message, isError = false) {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastText');
@@ -86,7 +85,6 @@
             document.getElementById('toast').classList.add('hidden');
         });
 
-        // Check for flash messages on page load
         window.addEventListener('load', () => {
             const successMessage = @json(session('success'));
             const errors = @json($errors->all());

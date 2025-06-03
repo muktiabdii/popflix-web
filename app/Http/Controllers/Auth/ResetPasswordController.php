@@ -16,7 +16,6 @@ class ResetPasswordController extends Controller
 
     public function reset(Request $request)
     {
-        // Validasi input
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'password' => 'required|min:8|confirmed',
@@ -26,14 +25,11 @@ class ResetPasswordController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        // Cari pengguna berdasarkan email
         $user = User::where('email', $request->email)->first();
 
-        // Update password
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // Redirect ke login dengan pesan sukses
         return redirect()->route('login')->with('status', 'Password berhasil direset. Silakan login dengan password baru.');
     }
 }
